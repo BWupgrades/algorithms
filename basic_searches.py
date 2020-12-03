@@ -1,5 +1,6 @@
 """
 Basic Search Algorithms implemented in different ways as functions.
+Each function returns True if found and False if not found.
 """
 
 #Creates a list of user input, breaks when user enters nothing.
@@ -16,7 +17,6 @@ def get_list():
 """
 Linear Search
 	Searches through each individual element one by one, to compare if this is the requested value.
-	Each function returns True if found and False if not found.
 """
 
 #Uses a for loop to loop through all items in the list.
@@ -45,8 +45,7 @@ def linear_search_three(lst, value):
 """
 Binary Search
 	Splits the list in half recursively until requested value is found or their is one item left.
-	Note: This requires the list to be ordered. 
-	Each function returns True if found and False if not found.
+	Note: This requires the list input to be ordered. 
 """
 
 #Uses recurssion to recursively split the list in half.
@@ -86,8 +85,8 @@ value = input("Please eneter a value to search for: ")
 print("\nLinear search one:", linear_search_one(lst, value))
 print("Linear search two:", linear_search_two(lst, value))
 print("Linear search three:", linear_search_three(lst, value))
-print("\n--------------------------------------------------------")
 
+print("\n--------------------------------------------------------")
 print("\nPlease ensure the list is ordered.")
 lst = get_list()
 print("\nYour list: ", lst)
