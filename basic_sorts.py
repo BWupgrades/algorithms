@@ -1,40 +1,22 @@
 """
 Basic Sort Algorithms implemented in different ways as functions.
 Each function returns the sorted list.
-Also has some basic functions to allow for user input or validation.
+Also has a basic functions to allow repated call for user input.
 """
 
 #Creates a list of user input, breaks when user enters nothing.
-def get_list():
-	lst = []
+def input_list():
+	int_lst, str_lst = [], []
 	print("To finish the list, please input nothing and press enter.")
 	while True:
 		new_item = input("Please enter a new item: ")
 		if new_item == "":
 			break
-		lst.append(new_item)
-	return lst
-
-#Splits list input into 2 lists of integers and strings.
-def split_list(lst):
-	int_lst, str_lst = [], []
-	for item in lst:
 		try:
-			int(item)
-			int_lst.append(item)
+			int_lst.append(int(new_item))
 		except:
-			str_lst.append(item)
+			str_lst.append(new_item)
 	return int_lst, str_lst
-
-#Merges two given lists, used to merge integer and string list.
-def merge_list(lst1, lst2):
-	if lst1 and lst2:
-		return lst1 + lst2
-	elif lst1:
-		return lst1
-	elif lst2:
-		return lst2
-	return []
 
 """
 Bubble Sort
@@ -47,9 +29,14 @@ def bubble_sort_one(lst):
 	if len(lst):
 		sorted = True
 		for i in range(1, len(lst)):
-			if lst[i-1] > lst[i]:
-				lst[i-1], lst[i] = lst[i], lst[i-1]
-				sorted = False
+			try:
+				if lst[i-1] > lst[i]:
+					lst[i-1], lst[i] = lst[i], lst[i-1]
+					sorted = False
+			except:
+				if str(lst[i-1]) > str(lst[i]):
+					lst[i-1], lst[i] = lst[i], lst[i-1]
+					sorted = False
 		if sorted:
 			return lst
 		return bubble_sort_one(lst)
@@ -61,9 +48,14 @@ def bubble_sort_two(lst):
 		while True:
 			sorted = True
 			for i in range(1, len(lst)):
-				if lst[i-1] > lst[i]:
-					lst[i-1], lst[i] = lst[i], lst[i-1]
-					sorted = False
+				try:
+					if lst[i-1] > lst[i]:
+						lst[i-1], lst[i] = lst[i], lst[i-1]
+						sorted = False
+				except:
+					if str(lst[i-1]) > str(lst[i]):
+						lst[i-1], lst[i] = lst[i], lst[i-1]
+						sorted = False
 			if sorted:
 				return lst
 	return []
@@ -95,25 +87,28 @@ def insertion_sort_one(lst):
 		for i in range(len(lst)):
 			placed = False
 			for j in range(len(sorted_lst)):
-				if sorted_lst[j] > lst[i]:
-					sorted_lst.insert(j, lst[i])
-					placed = True
-					break
+				try:
+					if sorted_lst[j] > lst[i]:
+						sorted_lst.insert(j, lst[i])
+						placed = True
+						break
+				except:
+					if str(sorted_lst[j]) > str(lst[i]):
+						sorted_lst.insert(j, lst[i])
+						placed = True
+						break
 			if not placed:
 				sorted_lst.append(lst[i])
 		return sorted_lst
 	return []
 
 #Main program
-lst = get_list()
-print("\nYour list: ", lst)
-int_lst, str_lst = split_list(lst)
+int_lst, str_lst = input_list()
+print("\nYour list: ", int_lst + str_lst)
 
 print("\n--------------------------------------------------------")
-print("\nBubble sort one:",  merge_list(bubble_sort_one(int_lst), bubble_sort_one(str_lst)))
-print("Bubble sort two:",   merge_list(bubble_sort_two(int_lst), bubble_sort_two(str_lst)))
+print("\nBubble sort one:", (bubble_sort_one(int_lst) + bubble_sort_one(str_lst)))
+print("Bubble sort two:", (bubble_sort_two(int_lst) + bubble_sort_two(str_lst)))
 
 print("\n--------------------------------------------------------")
-print("\nInsertion sort one:",  merge_list(insertion_sort_one(int_lst), insertion_sort_one(str_lst)))
-
-print("\n--------------------------------------------------------")
+print("\nInsertion sort one:", (insertion_sort_one(int_lst) + insertion_sort_one(str_lst)))
