@@ -1,5 +1,5 @@
 # algorithms
-This will contain coded examples of basic algorithms, each of which are contained within .py file that fits their type.
+This will contain coded examples of basic algorithms, each of which are contained within a single .py file that fits their type.
 
 basic_searches.py contains:
   - Linear search
