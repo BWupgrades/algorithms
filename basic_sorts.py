@@ -1,22 +1,10 @@
 """
 Basic Sort Algorithms implemented in different ways as functions.
 Each function returns the sorted list.
-Also has a basic functions to allow repated call for user input.
+Also has a basic functions to allow repeated call for user input.
 """
 
-#Creates a list of user input, breaks when user enters nothing.
-def input_list():
-	int_lst, str_lst = [], []
-	print("To finish the list, please input nothing and press enter.")
-	while True:
-		new_item = input("Please enter a new item: ")
-		if new_item == "":
-			break
-		try:
-			int_lst.append(int(new_item))
-		except:
-			str_lst.append(new_item)
-	return int_lst, str_lst
+import random
 
 """
 Bubble Sort
@@ -113,16 +101,18 @@ Quick Sort
 	Repeates this process until sub-lists contain one element, then the sorted list is created.
 """
 
-#Main program
-int_lst, str_lst = input_list()
-print("\nYour list: ", int_lst + str_lst)
-
-print("\n--------------------------------------------------------")
-print("\nBubble sort one:", (bubble_sort_one(int_lst) + bubble_sort_one(str_lst)))
-print("Bubble sort two:", (bubble_sort_two(int_lst) + bubble_sort_two(str_lst)))
-
-print("\n--------------------------------------------------------")
-print("\nInsertion sort one:", (insertion_sort_one(int_lst) + insertion_sort_one(str_lst)))
-
-print("\n--------------------------------------------------------")
-print("\nMerge sort one:", (merge_sort_one(int_lst) + merge_sort_one(str_lst)))
+#NOT DONE -------------------------------
+def quick_sort_one(lst):
+	if len(lst) == 0:
+		return []
+	if len(lst) > 1: 
+		pivot = random.choice(lst)
+		left_half, right_half = [], []
+		for i in lst:
+			if i <= pivot:
+				left_half.append(i)
+			else:
+				right_half.append(i)
+		quick_sort_one(left_half)
+		quick_sort_one(right_half)
+	return lst

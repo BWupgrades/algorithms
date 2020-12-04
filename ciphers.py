@@ -4,21 +4,30 @@ Each function returns either the plain text or cipher text
 Also has a basic functions to allow repeated call for user input.
 """
 
-import string
+"""
+Atbash Cipher
+	The substitution cipher with a set key, which is the character set reversed
+	Key type is a pre-set list
+"""
 
-#Allows the user to input a string and a key
-def user_input():
-	txt, key, cipher_type = "", "", ""
-	while txt == "":
-		txt = input("Please enter text for the cipher: ")
-	while key == "": 
-		key = input("Please enter a key for the chipher: ")
-	while cipher_type not in ["e", "d"]:
-		cipher_type = input("Would you like to encrypt or decrypt? [e/d]").lower()
-	return txt, key, cipher_type
+def atbash_encrypt(txt, key=None):
+	cipher_txt = ""
+	for char in txt:
+		ascii_val = (127 - ord(char))
+		cipher_txt += chr(ascii_val)
+	return cipher_txt
+
+def atbash_decrypt(txt, key=None):
+	plain_txt = ""
+	for char in txt:
+		ascii_val = (127 - ord(char))
+		plain_txt += chr(ascii_val)
+	return plain_txt
+
 """
 Caesar Cipher
 	Shifts each character over by the value of the key
+	Key type is an integer
 """
 
 def caesar_encrypt(txt, key):
@@ -35,24 +44,18 @@ def caesar_decrypt(txt, key):
 		plain_txt += chr(ascii_val)
 	return plain_txt
 
-#Main program
+"""
+Substitution Cipher
+	Replaces each character with another set character
+	Key type is a list
+"""
+#---------------------- NOT DONE YET ----------------------
+def substitution_encrypt(txt, key):
+	print(len(string.printable))
 
-txt, key, cipher_type = user_input()
 
-try:
-	key = int(key)
-	if cipher_type == "e":
-		print("\n--------------------------------------------------------")
-		print("Caesar encrypt:", caesar_encrypt(txt, key))
-
-	else:
-		print("\n--------------------------------------------------------")
-		print("Caesar decrypt:", caesar_decrypt(txt, key))
-
-except:
-	if cipher_type == "e":
-		print("\n--------------------------------------------------------")
-		
-	else:
-		print("\n--------------------------------------------------------")
-		
+#--- USED TO TEST ---	
+# test = "Hello, this is a test example! Don't forget to test :)"
+# e = atbash_encrypt(test)
+# d = atbash_decrypt(e)
+# print(e, "\n", d)

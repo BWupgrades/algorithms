@@ -1,46 +1,8 @@
 """
 Basic Search Algorithms implemented in different ways as functions.
 Each function returns True if found and False if not found.
+Also has a basic functions to allow repeated call for user input.
 """
-
-#Creates a list of user input, breaks when user enters nothing.
-def get_list():
-	lst = []
-	print("To finish the list, please input nothing and press enter.")
-	while True:
-		new_item = input("Please enter a new item: ")
-		if new_item == "":
-			break
-		lst.append(new_item)
-	return lst
-
-"""
-Linear Search
-	Searches through each individual element one by one, to compare if this is the requested value.
-"""
-
-#Uses a for loop to loop through all items in the list.
-def linear_search_one(lst, value):
-	for val in lst:
-		if val == value:
-			return True
-	return False
-
-#Uses a for loop to loop through each index in the list.
-def linear_search_two(lst, value):
-	for i in range(len(lst)):
-		if lst[i] == value:
-			return True
-	return False
-
-#Uses a while to loop through each index within the list.
-def linear_search_three(lst, value):
-	i = 0
-	while i < len(lst):
-		if lst[i] ==  value:
-			return True
-		i += 1
-	return False
 
 """
 Binary Search
@@ -77,20 +39,30 @@ def binary_search_two(lst, value):
 		elif lst[half] < value:
 			del lst[:half]
 
-#Main program
-lst = get_list()
-print("\nYour list: ", lst)
-value = input("Please eneter a value to search for: ")
+"""
+Linear Search
+	Searches through each individual element one by one, to compare if this is the requested value.
+"""
 
-print("\nLinear search one:", linear_search_one(lst, value))
-print("Linear search two:", linear_search_two(lst, value))
-print("Linear search three:", linear_search_three(lst, value))
+#Uses a for loop to loop through all items in the list.
+def linear_search_one(lst, value):
+	for val in lst:
+		if val == value:
+			return True
+	return False
 
-print("\n--------------------------------------------------------")
-print("\nPlease ensure the list is ordered.")
-lst = get_list()
-print("\nYour list: ", lst)
-value = input("Please eneter a value to search for: ")
+#Uses a for loop to loop through each index in the list.
+def linear_search_two(lst, value):
+	for i in range(len(lst)):
+		if lst[i] == value:
+			return True
+	return False
 
-print("\nBinary search one:", binary_search_one(lst, value))
-print("Binary search two:", binary_search_two(lst, value))
+#Uses a while to loop through each index within the list.
+def linear_search_three(lst, value):
+	i = 0
+	while i < len(lst):
+		if lst[i] ==  value:
+			return True
+		i += 1
+	return False
