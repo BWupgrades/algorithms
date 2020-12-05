@@ -1,6 +1,7 @@
 """
 Websites used:
-	- 
+	- http://practicalcryptography.com/ciphers/
+	- https://www.cryptogram.org/resource-area/cipher-types/
 """
 
 
@@ -30,6 +31,46 @@ def atbash_decrypt(txt, key=None):
 		ascii_val = (127 - ord(char))
 		plain_txt += chr(ascii_val)
 	return plain_txt
+
+"""
+Baconian Cipher
+	The substitution cipher with a specific key, each character bounded to multple letters
+	Key type is a pre set list
+"""
+def baconian_encrypt(txt, key=None):
+	cipher_txt = ""
+	alphabet = "abcdefghijklmnopqrstuvwxyz"
+	baconian_key = ["aaaaa", "aaaab", "aaaba", "aaabb", "aabaa", "aabab", "aabba", "aabbb", "abaaa", "abaaa", "abaab", "ababa", "ababb", "abbaa", "abbab", "abbba", "abbbb", "baaaa", "baaab", "baaba", "baabb", "baabb", "babaa", "babab", "babba", "babbb"] #Note I/J = abaaa and U/V = baabb
+	for char in txt:
+		if char.isalpha():
+			val = alphabet.find(char.lower())
+			if char.isupper():
+				cipher_txt += baconian_key[val].upper()
+			else:
+				cipher_txt += baconian_key[val].lower()
+		else:
+			cipher_txt += char
+	return cipher_txt
+
+def baconian_decrypt(txt, key=None):
+	cipher_txt = ""
+	alphabet = "abcdefghijklmnopqrstuvwxyz"
+	baconian_key = ["aaaaa", "aaaab", "aaaba", "aaabb", "aabaa", "aabab", "aabba", "aabbb", "abaaa", "abaaa", "abaab", "ababa", "ababb", "abbaa", "abbab", "abbba", "abbbb", "baaaa", "baaab", "baaba", "baabb", "baabb", "babaa", "babab", "babba", "babbb"] #Note I/J = abaaa and U/V = baabb
+	count, temp_word = 0, ""
+	for char in txt:
+		if char.isalpha():
+			count += 1
+			temp_word += char
+			if count == 5:
+				val = baconian_key.index(temp_word.lower())
+				if temp_word[0].isupper():
+					cipher_txt += alphabet[val].upper()
+				else:
+					cipher_txt += alphabet[val].lower()
+				count, temp_word = 0, ""
+		else:
+			cipher_txt += char
+	return cipher_txt
 
 """
 Caesar Cipher
@@ -73,6 +114,70 @@ def key_phrase_encrypt(txt, key):
 def key_phrase_decrypt(txt, key):
 	pass
 	#going to have to use stats to decrypt since not one-one
+
+"""
+Morse Code
+	Uses dots and dashes to determine each letter
+	The key is a pre defined dict of morse code values
+	Note: / is used to seperate the words for the user
+"""
+def txt_to_morse(txt, key=None):
+	morse_txt = ""
+	key = {
+		"a": ".-", "b": "-...", "c": "-.-.",
+		"d": "-..", "e": ".", "f": "..-.",
+		"g": "--.", "h": "....", "i": "..",
+		"j": ".---", "k": "-.-", "l": ".-..",
+		"m": "--", "n": "-.", "o": "---",
+		"p": ".--.", "q": "--.-", "r": ".-.",
+		"s": "...", "t": "-", "u": "..-",
+		"v": "...-", "w": ".--", "x": "-..-",
+		"y": "-.-", "z": "--.."
+	}
+	for char in txt:
+		if char.isalpha():
+			morse_txt += (key[char.lower()] + " ")
+		else:
+			if char == " ":
+				char = "  /  "
+			morse_txt += char
+	return morse_txt
+
+def morse_to_txt(txt, key=None):
+	plain_txt = ""
+	key = {
+		".-": "a", "-...": "b", "-.-.": "c",
+		"-..": "d", ".": "e", "..-.": "f",
+		"--.": "g", "....": "h", "..": "i",
+		".---": "j", "-.-": "k", ".-..": "l",
+		"--": "m", "-.": "n", "---": "o",
+		".--.": "p", "--.-": "q", ".-.": "r",
+		"...": "s", "-": "t", "..-": "u",
+		"...-": "v", ".--": "w", "-..-": "x",
+		"-.-": "y", "--..": "z"
+	}
+	temp_code = ""
+	for char in txt:
+		if (char == "." or char == "-") and len(temp_code) < 4:
+			temp_code += char
+		elif char == " " and temp_code != "":
+			plain_txt += key[temp_code]
+			temp_code = ""
+		elif char == "/":
+			plain_txt += " "
+		else:
+			plain_txt += char
+	#Just to remove extra large spaces and make it look better
+	nice_text, first_space = "", True
+	for char in plain_txt:
+		if char != " ":
+			first_space = True
+			nice_text += char
+		elif first_space:
+			nice_text += " "
+			first_space = False
+	return nice_text
+
 """
 Rail-Fence Cipher
 	Writes each letter in a zig-zag (based on key val) then merges lines top to bottom
@@ -123,7 +228,6 @@ def rot13_decrypt(txt, key=None):
 		plain_txt += chr(ascii_val)
 	return plain_txt
 	
-
 """
 Substitution Cipher
 	Replaces each character with another set character
@@ -133,9 +237,9 @@ Substitution Cipher
 def substitution_encrypt(txt, key):
 	pass
 
-
 #--- USED TO TEST ---	
 test = "Hello, this is a test example!"
-e = key_phrase_encrypt(test, "onetwothreefourfivesixseve")
-d = key_phrase_decrypt(e, "onetwothreefourfivesixseve")
-print(e, "\n", d)
+e = txt_to_morse(test, "idek")
+print(e)
+d = morse_to_txt(e, "idek")
+print(d)
