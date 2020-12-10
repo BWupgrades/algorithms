@@ -91,14 +91,80 @@ def caesar_decrypt(txt, key):
 		plain_txt += chr(ascii_val)
 	return plain_txt
 
+#---------------------- NOT DONE YET ----------------------
+"""
+Hill Cipher
+	Breaks letters into blocks of 3 and uses matrix multiplication mod 26 to get new letters
+	Key type is a 3x3 matrix, 2d array of 3 lists containing 3 integers
+"""
+#Required for Hill Cipher
+def matrix_multiply(a, b):
+	temp_val, c = 0, []
+	for x in range(3):
+		for y in range(3):
+			temp_val += (a[y][x] * b[y])
+		c.append(temp_val)
+		temp_val = 0
+	return c
+
+#Still broke?
+def hill_encrypt(txt, key):
+	cipher_txt = ""
+	alphabet = "abcdefghijklmnopqrstuvwxyz"
+	char_count, temp_lst, none_alpha_dict = 0, [], {}
+	while char_count < len(txt):
+		char = txt[char_count]
+		if char.isalpha():
+			if len(temp_lst) < 3:
+				val = alphabet.find(char.lower())
+				temp_lst.append(val)
+			else:
+				c = matrix_multiply(key, temp_lst)
+				for i in c:
+					pos = i % 26
+					cipher_txt += alphabet[pos]
+				if none_alpha_dict:
+					for dict_key in none_alpha_dict:
+						temp_char = none_alpha_dict[dict_key]
+						position, char_value = temp_char[0], temp_char[1]
+						cipher_txt = cipher_txt[:position] + char_value + cipher_txt[position:]
+				temp_lst, none_alpha_dict = [], {}
+				char_count -= 1 #To stop it skiping the 4th char
+		else:
+			if none_alpha_dict:
+				temp_key = sorted(none_alpha_dict.keys())[-1]
+				none_alpha_dict[temp_key+1] = [char_count, char]
+			else:
+				none_alpha_dict[0] = [char_count, char]
+		char_count += 1
+	#Ensures any vals left in temp_lst are added	
+	if temp_lst != []:
+		items_left = len(temp_lst)
+		while len(temp_lst) < 3:
+			temp_lst.append(0)
+		c = matrix_multiply(key, temp_lst)
+		for i in range(3-items_left):
+			del c[-1]
+		for i in c:
+			pos = i % 26
+			cipher_txt += alphabet[pos]
+	#Ensures any vals left in none_alpha_dict are inserted
+	if none_alpha_dict:
+		for dict_key in none_alpha_dict:
+			temp_char = none_alpha_dict[dict_key]
+			position, char_value = temp_char[0], temp_char[1]
+			cipher_txt = cipher_txt[:position] + char_value + cipher_txt[position:]
+	return cipher_txt
+
+
 """
 Key Phrase Cipher
 	A 26 letter key is used to replace plain text with the key letter assigned to the alphabet
 	Key type is a 26 character string
 """
 def key_phrase_encrypt(txt, key):
-	alphabet = "abcdefghijklmnopqrstuvwxyz"
 	cipher_txt = ""
+	alphabet = "abcdefghijklmnopqrstuvwxyz"
 	for char in txt:
 		if char.isalpha():
 			val = alphabet.find(char.lower())
@@ -239,7 +305,15 @@ def substitution_encrypt(txt, key):
 
 #--- USED TO TEST ---	
 test = "Hello, this is a test example!"
-e = txt_to_morse(test, "idek")
+# e = txt_to_morse(test, "idek")
+# print(e)
+# d = morse_to_txt(e, "idek")
+# print(d)
+
+a = [[2, 9, 3], [4, 2, 17], [5, 1, 7]]
+b = [0, 19, 19]
+# ans = matrix_multiply(a, b)
+# print(ans)
+
+e = hill_encrypt(test, a)
 print(e)
-d = morse_to_txt(e, "idek")
-print(d)
