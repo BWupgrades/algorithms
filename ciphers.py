@@ -1,9 +1,8 @@
 """
-Websites used:
+Websites used for research:
 	- http://practicalcryptography.com/ciphers/
 	- https://www.cryptogram.org/resource-area/cipher-types/
 """
-
 
 """
 Basic ciphers implemented with encrypt and decrypt functions.
@@ -12,6 +11,64 @@ Also has a basic functions to allow repeated call for user input.
 
 key = None implies cipher doen NOT require a key or the key is pre set
 """
+
+"""
+IDEAS:
+	- Have V1 to only change alpha characters and V2 to change all characters
+	- Create GUI to display all functions, website?
+"""
+
+#Functions and Variables used across the ciphers
+alphabet = "abcdefghijklmnopqrstuvwxyz"
+
+#Required for Hill Cipher
+def matrix_multiply(a, b):
+	temp_val, c = 0, []
+	for x in range(3):
+		for y in range(3):
+			temp_val += (a[y][x] * b[y])
+		c.append(temp_val)
+		temp_val = 0
+	return c
+
+"""
+Affine Cipher
+	Uses a mathmatical calculation to create the new char value for the cipher text
+	Key type is 2x +ve integers
+"""
+def affine_encryption(txt, key_a, key_b):
+	cipher_txt = ""
+	for char in txt:
+		if char.isalpha():
+			p = alphabet.find(char.lower())
+			c = ((key_a * p) + key_b) % 26
+			if char.isupper():
+				cipher_txt += alphabet[c].upper()
+			else:
+				cipher_txt += alphabet[c].lower()
+		else:
+			cipher_txt += char
+	return cipher_txt
+
+def affine_decryption(txt, key_a, key_b):
+	plain_txt = ""
+	#Gets the inverse of key_a
+	for x in range (1, 25):
+		check = (key_a * x) % 26
+		if check == 1:
+			inv_a = x
+			break
+	for char in txt:
+		if char.isalpha():
+			c = alphabet.find(char.lower())
+			p = inv_a * (c - key_b) % 26
+			if char.isupper():
+				plain_txt += alphabet[p].upper()
+			else:
+				plain_txt += alphabet[p].lower()
+		else:
+			plain_txt += char
+	return plain_txt
 
 """
 Atbash Cipher
@@ -39,7 +96,6 @@ Baconian Cipher
 """
 def baconian_encrypt(txt, key=None):
 	cipher_txt = ""
-	alphabet = "abcdefghijklmnopqrstuvwxyz"
 	baconian_key = ["aaaaa", "aaaab", "aaaba", "aaabb", "aabaa", "aabab", "aabba", "aabbb", "abaaa", "abaaa", "abaab", "ababa", "ababb", "abbaa", "abbab", "abbba", "abbbb", "baaaa", "baaab", "baaba", "baabb", "baabb", "babaa", "babab", "babba", "babbb"] #Note I/J = abaaa and U/V = baabb
 	for char in txt:
 		if char.isalpha():
@@ -54,7 +110,6 @@ def baconian_encrypt(txt, key=None):
 
 def baconian_decrypt(txt, key=None):
 	cipher_txt = ""
-	alphabet = "abcdefghijklmnopqrstuvwxyz"
 	baconian_key = ["aaaaa", "aaaab", "aaaba", "aaabb", "aabaa", "aabab", "aabba", "aabbb", "abaaa", "abaaa", "abaab", "ababa", "ababb", "abbaa", "abbab", "abbba", "abbbb", "baaaa", "baaab", "baaba", "baabb", "baabb", "babaa", "babab", "babba", "babbb"] #Note I/J = abaaa and U/V = baabb
 	count, temp_word = 0, ""
 	for char in txt:
@@ -91,26 +146,14 @@ def caesar_decrypt(txt, key):
 		plain_txt += chr(ascii_val)
 	return plain_txt
 
-#---------------------- NOT DONE YET ----------------------
 """
 Hill Cipher
 	Breaks letters into blocks of 3 and uses matrix multiplication mod 26 to get new letters
 	Key type is a 3x3 matrix, 2d array of 3 lists containing 3 integers
 """
-#Required for Hill Cipher
-def matrix_multiply(a, b):
-	temp_val, c = 0, []
-	for x in range(3):
-		for y in range(3):
-			temp_val += (a[y][x] * b[y])
-		c.append(temp_val)
-		temp_val = 0
-	return c
 
-#Still broke?
 def hill_encrypt(txt, key):
 	cipher_txt = ""
-	alphabet = "abcdefghijklmnopqrstuvwxyz"
 	char_count, temp_lst, none_alpha_dict = 0, [], {}
 	while char_count < len(txt):
 		char = txt[char_count]
@@ -156,6 +199,9 @@ def hill_encrypt(txt, key):
 			cipher_txt = cipher_txt[:position] + char_value + cipher_txt[position:]
 	return cipher_txt
 
+#---------------------- NOT DONE YET ----------------------
+def hill_decrypt(txt, key):
+	pass
 
 """
 Key Phrase Cipher
@@ -164,7 +210,6 @@ Key Phrase Cipher
 """
 def key_phrase_encrypt(txt, key):
 	cipher_txt = ""
-	alphabet = "abcdefghijklmnopqrstuvwxyz"
 	for char in txt:
 		if char.isalpha():
 			val = alphabet.find(char.lower())
@@ -303,17 +348,12 @@ Substitution Cipher
 def substitution_encrypt(txt, key):
 	pass
 
+def substitution_decrypt(txt, key):
+	pass
+
 #--- USED TO TEST ---	
 test = "Hello, this is a test example!"
-# e = txt_to_morse(test, "idek")
-# print(e)
-# d = morse_to_txt(e, "idek")
-# print(d)
-
-a = [[2, 9, 3], [4, 2, 17], [5, 1, 7]]
-b = [0, 19, 19]
-# ans = matrix_multiply(a, b)
-# print(ans)
-
-e = hill_encrypt(test, a)
+e = affine_encryption(test, 15, 11)
 print(e)
+d = affine_decryption(e, 15, 11)
+print(d)
