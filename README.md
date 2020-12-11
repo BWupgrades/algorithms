@@ -10,3 +10,17 @@ basic_sorts.py contains:
   - Insertion sort
   - Merge sort
   - Quick sort
+  
+ciphers.py contains:
+  - Affine Cipher
+  - Atbash Cipher
+  - Baconian Cipher
+  - Ceaser Cipher
+  - Hill Cipher *
+  - Key Phrase Cipher *
+  - Morse Code
+  - Rail Fence Cipher *
+  - ROT13 Cipher
+  - Substitution Cipher
+
+Note: Those with a * are not yet fully complete.
